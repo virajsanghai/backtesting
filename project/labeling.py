@@ -1,9 +1,7 @@
 import pandas as pd
 
-def apply_labels():
-    data_ohlc = pd.read_parquet('data_dollar_ohlc.pq')
-    data_ohlc = \
-        data_ohlc.assign(threshold=get_vol(data_ohlc.close)).dropna()
+def apply_labels(data_ohlc: pd.DataFrame):
+    data_ohlc = data_ohlc.assign(threshold=get_vol(data_ohlc['Close'])).dropna()
     data_ohlc = data_ohlc.assign(t1=get_horizons(data_ohlc)).dropna()
     events = data_ohlc[['t1', 'threshold']]
     events = events.assign(side=pd.Series(1., events.index))  # long only
